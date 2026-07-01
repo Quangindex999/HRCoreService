@@ -1,0 +1,187 @@
+@HRCoreService_HostAddress = http://localhost:5098
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+@departmentId = 00000000-0000-0000-0000-000000000001
+@employeeId = 00000000-0000-0000-0000-000000000002
+
+### ===== AUTH =====
+
+### [POST] Login
+POST {{HRCoreService_HostAddress}}/api/v1/hr/auth/login
+Content-Type: application/json
+
+{
+  "username": "hr",
+  "password": "123456"
+}
+
+###
+
+### [POST] Admin/HR creates account for an employee
+POST {{HRCoreService_HostAddress}}/api/v1/hr/auth/create-account
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "employeeId": "{{employeeId}}",
+  "username": "employee.demo",
+  "password": "123456",
+  "role": "Employee"
+}
+
+###
+
+### [GET] Employees without account
+GET {{HRCoreService_HostAddress}}/api/v1/hr/auth/employees-without-account
+Authorization: Bearer {{token}}
+Accept: application/json
+
+###
+
+### ===== DEPARTMENTS =====
+
+### [GET] Get department tree
+GET {{HRCoreService_HostAddress}}/api/v1/hr/departments/tree
+Authorization: Bearer {{token}}
+Accept: application/json
+
+###
+
+### [POST] Create new department
+POST {{HRCoreService_HostAddress}}/api/v1/hr/departments
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Phong Ky thuat",
+  "code": "KT",
+  "parentId": null
+}
+
+###
+
+### [PUT] Update department (replace {{departmentId}} with real ID)
+PUT {{HRCoreService_HostAddress}}/api/v1/hr/departments/{{departmentId}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Phong Ky thuat (Updated)",
+  "code": "KT2",
+  "parentId": null
+}
+
+###
+
+### [DELETE] Delete department - requires Admin or HR role
+DELETE {{HRCoreService_HostAddress}}/api/v1/hr/departments/{{departmentId}}
+Authorization: Bearer {{token}}
+
+###
+
+### ===== EMPLOYEES =====
+
+### [GET] Get all employees
+GET {{HRCoreService_HostAddress}}/api/v1/hr/employees
+Authorization: Bearer {{token}}
+Accept: application/json
+
+###
+
+### [GET] Get employee by ID
+GET {{HRCoreService_HostAddress}}/api/v1/hr/employees/{{employeeId}}
+Authorization: Bearer {{token}}
+Accept: application/json
+
+###
+
+### [POST] Create new employee - requires Admin or HR role
+POST {{HRCoreService_HostAddress}}/api/v1/hr/employees
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "departmentId": "{{departmentId}}",
+  "employeeCode": "NV001",
+  "fullName": "Nguyen Van A",
+  "email": "nguyenvana@company.com",
+  "position": "Software Engineer",
+  "contractType": "Full-time",
+  "baseSalary": 15000000
+}
+
+###
+
+### [PUT] Update employee - requires Admin or HR role
+PUT {{HRCoreService_HostAddress}}/api/v1/hr/employees/{{employeeId}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "fullName": "Nguyen Van A (Updated)",
+  "position": "Senior Engineer",
+  "baseSalary": 20000000,
+  "status": "Active"
+}
+
+###
+
+### [DELETE] Delete employee - requires Admin or HR role
+DELETE {{HRCoreService_HostAddress}}/api/v1/hr/employees/{{employeeId}}
+Authorization: Bearer {{token}}
+
+###
+
+### [POST] Bulk create employees - requires Admin or HR role
+POST {{HRCoreService_HostAddress}}/api/v1/hr/employees/bulk-create
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+[
+  {
+    "departmentId": "{{departmentId}}",
+    "employeeCode": "NV002",
+    "fullName": "Tran Thi B",
+    "email": "tranthib@company.com",
+    "position": "Business Analyst",
+    "contractType": "Full-time",
+    "baseSalary": 12000000
+  },
+  {
+    "departmentId": "{{departmentId}}",
+    "employeeCode": "NV003",
+    "fullName": "Le Van C",
+    "email": "levanc@company.com",
+    "position": "Tester",
+    "contractType": "Part-time",
+    "baseSalary": 8000000
+  }
+]
+
+###
+
+### [PUT] Bulk update employees - requires Admin or HR role
+PUT {{HRCoreService_HostAddress}}/api/v1/hr/employees/bulk-update
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "{{employeeId}}": {
+    "position": "Lead Engineer",
+    "baseSalary": 25000000,
+    "status": "Active"
+  }
+}
+
+###
+
+### [DELETE] Bulk delete employees - requires Admin or HR role
+DELETE {{HRCoreService_HostAddress}}/api/v1/hr/employees/bulk-delete
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+[
+  "00000000-0000-0000-0000-000000000002",
+  "00000000-0000-0000-0000-000000000003"
+]
+
+###
