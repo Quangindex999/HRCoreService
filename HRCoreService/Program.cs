@@ -2,6 +2,7 @@ using HRCoreDB.Data;
 using HRCoreDB.Extensions;
 using HRCoreService.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using Microsoft.OpenApi.Models;
@@ -117,6 +118,10 @@ app.MapControllers();
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<HRCoreDbContext>();
+    
+    // Tự động apply migration khi khởi động app
+    await db.Database.MigrateAsync();
+    
     await DbSeeder.SeedAsync(db);
 }
 
