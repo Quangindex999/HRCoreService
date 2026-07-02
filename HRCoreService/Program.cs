@@ -96,12 +96,9 @@ builder.Services.AddAuthentication(option =>
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+// Bật Swagger luôn (không cần kiểm tra IsDevelopment) để Docker cũng hiển thị
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 
