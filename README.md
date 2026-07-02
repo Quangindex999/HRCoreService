@@ -35,4 +35,23 @@ docker-compose down
 *(Nếu muốn xóa cả volume chứa dữ liệu của SQL Server, thêm cờ `-v`: `docker-compose down -v`)*
 
 ---
-**Lưu ý:** Nếu bạn đang chạy ứng dụng trong Visual Studio / Rider thay vì dùng Docker, hãy đảm bảo bạn có cài SQL Server và sửa lại connection string trong `appsettings.json` cho phù hợp.
+
+## Cách 2: Chạy trực tiếp (Không dùng Docker - Dành cho DEV)
+
+Nếu bạn không muốn dùng Docker mà muốn chạy trực tiếp bằng Visual Studio, Rider hoặc lệnh `dotnet run`, hãy làm theo các bước sau:
+
+1. **Cập nhật Connection String**:
+   Mở file `HRCoreService/appsettings.json`, tìm đến mục `ConnectionStrings:HRCoreDB` và sửa thông tin `Server` thành tên SQL Server trên máy bạn (ví dụ: `.\SQLEXPRESS`, `localhost`, v.v.).
+
+2. **Chạy dự án**:
+   Mở Terminal tại thư mục `HRCoreService` (chứa file `.csproj`) và gõ:
+   ```bash
+   dotnet run
+   ```
+   Hoặc đơn giản là bấm nút Play (Run) trong Visual Studio.
+
+3. **Database tự động sinh ra**:
+   Code đã được cấu hình tính năng Auto-Migration. Ngay khi app vừa chạy lên, nó sẽ tự động kết nối vào SQL Server của bạn, tạo Database `HRCoreDB` với đầy đủ các bảng và dữ liệu mẫu (admin, hr...). 
+   *(Bạn không cần phải chạy file .bak hay tạo tay bất cứ thứ gì!)*
+
+> **Lưu ý quan trọng cho team:** Các lỗi cũ về Migration (như lỗi không tìm thấy bảng) đã được fix. Hãy chắc chắn bạn đã pull code mới nhất (bao gồm cả thư mục `Migrations` mới) trước khi chạy.
